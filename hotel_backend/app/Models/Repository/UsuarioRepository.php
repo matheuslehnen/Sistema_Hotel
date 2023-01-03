@@ -50,6 +50,9 @@ class UsuarioRepository extends EntityRepository
     public function delete(Usuario $usuario)
     {
         $this->getEntityManager()->remove($usuario);
+        $this->getEntityManager()->flush();
+
+        return $usuario->getId() == null;
     }
 
 }

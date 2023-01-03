@@ -75,8 +75,7 @@ class UsuarioService
     public function delete($id = null): string
     {
         $usuarioDto = $this->usuarioRepository->listarPorId($id);
-        return $this->serializer->serialize($usuarioDto, $this->format);
-        //return $usuarioDto != null ? 'Usuário excluído com sucesso!': 'Usuário não encontrado';
+        return !empty($usuarioDto) && $this->usuarioRepository->delete($usuarioDto);
     }
 
     public function login(?string $getBody): string

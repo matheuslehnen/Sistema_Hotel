@@ -45,8 +45,9 @@ class UsuarioController extends ResourceController
 
     public function delete($id = null): Response
     {
+
         $usuarioDto = $this->usuarioService->delete($id);
-        return $this->response->setJSON($usuarioDto );
+        return $this->response->setJSON($usuarioDto);
     }
 
     public function login(): Response
