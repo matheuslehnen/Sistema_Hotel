@@ -1,0 +1,19 @@
+
+#menu-title{
+    text-decoration: none;
+}
+
+footer{
+    background-color: #ECEFF1;
+}
+
+hr{
+    width: 60px;
+    background-color: #7c4dff;
+    height: 2px
+}
+
+#copyright-div{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
