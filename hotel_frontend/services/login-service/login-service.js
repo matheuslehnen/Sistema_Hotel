@@ -10,12 +10,9 @@ function logar(login, senha) {
     })
         .then((data) => {
             if(data.status === true){
-                window.location.href = "index.html"
-                //chamar template
                 window.sessionStorage.setItem('usuario', JSON.stringify(data.login));
                 window.sessionStorage.setItem('logado', 'true');
-                usuarioRegistroComponent();
-                // recepcaoComponent()
+                window.location.reload();
             } else {
                 alert("Usuário ou senha incorretos!")
             }

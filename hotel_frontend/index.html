@@ -12,86 +12,86 @@
             integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
             crossorigin="anonymous"></script>
     <script src="constants.js"></script>
-    <script src="index.js"></script>
-    <script src="components/navbar-component/navbar-component.js"></script>
-    <script src="components/footer-component/footer-component.js"></script>
-    <script src="components/sidebar-component/sidebar-component.js"></script>
-    <script src="components/carousel-component/carousel-component.js"></script>
-    <script src="components/login-component/login-component.js"></script>
-    <script src="components/usuario-registro-component/usuario-registro-component.js"></script>
-    <script src="components/quarto-component/quarto-component.js"></script>
-    <script src="components/cliente-component/cliente-component.js"></script>
-    <script src="components/hospedagem-component/hospedagem-component.js"></script>
-    <script src="components/usuario-registro-component/usuario-registro-component.js"></script>
-    <script src="components/hospedagem-component/hospedagem-component.js"></script>
-    <script src="components/usuario-component/usuario-component.js"></script>
+    <script src="script.js"></script>
+
+    <script src="components/home/navbar-component/navbar-component.js"></script>
+    <script src="components/home/footer-component/footer-component.js"></script>
+    <script src="components/home/sidebar-component/sidebar-component.js"></script>
+    <script src="components/home/carousel-component/carousel-component.js"></script>
+    <script src="components/home/login-component/login-component.js"></script>
+
+    <script src="components/quarto/quarto-component/quarto-component.js"></script>
+    <script src="components/quarto/quarto-cadastro-component/quarto-cadastro-component.js"></script>
+    <script src="components/quarto/quarto-editar-component/quarto-editar-component.js"></script>
+
+    <script src="components/cliente/cliente-component/cliente-component.js"></script>
+    <script src="components/cliente/cliente-cadastro-component/cliente-cadastro-component.js"></script>
+    <script src="components/cliente/cliente-editar-component/cliente-editar-component.js"></script>
+
+    <script src="components/hospedagem/hospedagem-component/hospedagem-component.js"></script>
+    <script src="components/hospedagem/hospedagem-checkin-component/hospedagem-checkin-component.js"></script>
+    <script src="components/hospedagem/hospedagem-checkout-component/hospedagem-checkout-component.js"></script>
+    <script src="components/hospedagem/hospedagem-editar-component/hospedagem-editar-component.js"></script>
+
+    <script src="components/usuario/usuario-component/usuario-component.js"></script>
+    <script src="components/usuario/usuario-cadastro-component/usuario-cadastro-component.js"></script>
+    <script src="components/usuario/usuario-editar-component/usuario-editar-component.js"></script>
+
     <script src="services/login-service/login-service.js"></script>
-    <script src="services/usuario-service/usuario-service.js"></script>
     <script src="services/quarto-service/quarto-service.js"></script>
     <script src="services/cliente-service/cliente-service.js"></script>
     <script src="services/hospedagem-service/hospedagem-service.js"></script>
+    <script src="services/usuario-service/usuario-service.js"></script>
+
 </head>
 
 <body class="bg-black">
 
 <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark p-0"></nav>
 
+<div class="container h-100 d-flex justify-content-center" id="container">
 
-<div class="container h-100" id="container">
+    <!--    <div class="card text-bg-light m-3">-->
+    <!--        <div class="card-header">Quarto</div>-->
+    <!--        <div class="card-body">-->
+    <!--            <h5 class="card-title">Lista de Quartos</h5>-->
+    <!--            <div class="border">AQUI VAI UMA TABELA COM OS QUARTOS</div>-->
+    <!--        </div>-->
+    <!--        <div class="card-footer bg-transparent ">-->
+    <!--            <button type="button" class="btn btn-outline-success fw-bold float-end" onclick="adicionarQuarto()">Adicionar</button>-->
+    <!--            <button type="button" class="btn btn-outline-primary fw-bold float-end me-2" onclick="listarQuartos()">Buscar</button>-->
+    <!--            <button type="button" class="btn btn-outline-warning fw-bold float-end me-2" onclick="editarQuarto()">Editar</button>-->
+    <!--            <button type="button" class="btn btn-outline-danger fw-bold float-end me-2" onclick="excluirQuarto()">Excluir</button>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
-<!--    <div class="card text-bg-light m-3">-->
-<!--        <div class="card-header">Quarto</div>-->
-<!--        <div class="card-body">-->
-<!--            <h5 class="card-title">Lista de Quartos</h5>-->
-<!--            <div class="border">AQUI VAI UMA TABELA COM OS QUARTOS</div>-->
-<!--        </div>-->
-<!--        <div class="card-footer bg-transparent ">-->
-<!--            <button type="button" class="btn btn-outline-success fw-bold float-end" onclick="adicionarQuarto()">Adicionar</button>-->
-<!--            <button type="button" class="btn btn-outline-primary fw-bold float-end me-2" onclick="listarQuartos()">Buscar</button>-->
-<!--            <button type="button" class="btn btn-outline-warning fw-bold float-end me-2" onclick="editarQuarto()">Editar</button>-->
-<!--            <button type="button" class="btn btn-outline-danger fw-bold float-end me-2" onclick="excluirQuarto()">Excluir</button>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div class="card text-bg-light m-3">-->
+    <!--        <div class="card-header">Cliente</div>-->
+    <!--        <div class="card-body">-->
+    <!--            <h5 class="card-title">Lista de Clientes</h5>-->
+    <!--            <div class="border">AQUI VAI UMA TABELA COM OS Clientes</div>-->
+    <!--        </div>-->
+    <!--        <div class="card-footer bg-transparent ">-->
+    <!--            <button type="button" class="btn btn-outline-success fw-bold float-end" onclick="adicionarCliente()">Adicionar</button>-->
+    <!--            <button type="button" class="btn btn-outline-primary fw-bold float-end me-2" onclick="listarClientes()">Buscar</button>-->
+    <!--            <button type="button" class="btn btn-outline-warning fw-bold float-end me-2" onclick="editarCliente()">Editar</button>-->
+    <!--            <button type="button" class="btn btn-outline-danger fw-bold float-end me-2" onclick="excluirCliente()">Excluir</button>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
-<!--    <div class="card text-bg-light m-3">-->
-<!--        <div class="card-header">Cliente</div>-->
-<!--        <div class="card-body">-->
-<!--            <h5 class="card-title">Lista de Clientes</h5>-->
-<!--            <div class="border">AQUI VAI UMA TABELA COM OS Clientes</div>-->
-<!--        </div>-->
-<!--        <div class="card-footer bg-transparent ">-->
-<!--            <button type="button" class="btn btn-outline-success fw-bold float-end" onclick="adicionarCliente()">Adicionar</button>-->
-<!--            <button type="button" class="btn btn-outline-primary fw-bold float-end me-2" onclick="listarClientes()">Buscar</button>-->
-<!--            <button type="button" class="btn btn-outline-warning fw-bold float-end me-2" onclick="editarCliente()">Editar</button>-->
-<!--            <button type="button" class="btn btn-outline-danger fw-bold float-end me-2" onclick="excluirCliente()">Excluir</button>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="card text-bg-light m-3">-->
-<!--        <div class="card-header">Hospedagem</div>-->
-<!--        <div class="card-body">-->
-<!--            <h5 class="card-title">Lista de Hospedagem</h5>-->
-<!--            <div class="border">AQUI VAI UMA TABELA COM AS HOSPEDAGENS</div>-->
-<!--        </div>-->
-<!--        <div class="card-footer bg-transparent ">-->
-<!--            <button type="button" class="btn btn-outline-success fw-bold float-end" onclick="checkIn()">Check-in</button>-->
-<!--            <button type="button" class="btn btn-outline-primary fw-bold float-end me-2" onclick="listarHospedagens()">Buscar</button>-->
-<!--            <button type="button" class="btn btn-outline-warning fw-bold float-end me-2" onclick="editarHospedagem()">Editar</button>-->
-<!--            <button type="button" class="btn btn-outline-danger fw-bold float-end me-2" onclick="checkOut()">Check-out</button>-->
-<!--        </div>-->
-<!--    </div>-->
-
-
-
-<!--    <tr>-->
-<!--        <th scope="row">2</th>-->
-<!--        <td>Jacob</td>-->
-<!--        <td>Thornton</td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <th scope="row">3</th>-->
-<!--        <td colspan="2">Larry the Bird</td>-->
-<!--    </tr>-->
+    <!--    <div class="card text-bg-light m-3">-->
+    <!--        <div class="card-header">Hospedagem</div>-->
+    <!--        <div class="card-body">-->
+    <!--            <h5 class="card-title">Lista de Hospedagem</h5>-->
+    <!--            <div class="border">AQUI VAI UMA TABELA COM AS HOSPEDAGENS</div>-->
+    <!--        </div>-->
+    <!--        <div class="card-footer bg-transparent ">-->
+    <!--            <button type="button" class="btn btn-outline-success fw-bold float-end" onclick="checkIn()">Check-in</button>-->
+    <!--            <button type="button" class="btn btn-outline-primary fw-bold float-end me-2" onclick="listarHospedagens()">Buscar</button>-->
+    <!--            <button type="button" class="btn btn-outline-warning fw-bold float-end me-2" onclick="editarHospedagem()">Editar</button>-->
+    <!--            <button type="button" class="btn btn-outline-danger fw-bold float-end me-2" onclick="checkOut()">Check-out</button>-->
+    <!--        </div>-->
+    <!--    </div>-->
 
 
 <!--    <div class="card text-bg-light m-3">-->
@@ -101,19 +101,39 @@
 <!--            <table class="table table-striped table-hover">-->
 <!--                <thead>-->
 <!--                <tr>-->
+<!--                    <th scope="col">-->
+<!--                        <input class="form-check-input" type="radio" disabled>-->
+<!--                        </i></th>-->
 <!--                    <th scope="col">Id</th>-->
 <!--                    <th scope="col">Login</th>-->
 <!--                    <th scope="col">Senha</th>-->
 <!--                </tr>-->
 <!--                </thead>-->
-<!--                <tbody id="table-body"></tbody>-->
+<!--                <tbody id="table-body">-->
+<!--                <tr class="table-data text-dark" id="usuario-table-row" onclick="teste()">-->
+<!--                    <th scope="row">-->
+<!--                        <input class="form-check-input" type="radio" name="radioNoLabel" id="radioNoLabel1" value="" aria-label="...">-->
+<!--                    </th>-->
+<!--                    <td>' + usuario.id + '</td>-->
+<!--                    <td>' + usuario.login + '</td>-->
+<!--                    <td>' + usuario.senha + '</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
 <!--            </table>-->
 <!--        </div>-->
 <!--        <div class="card-footer bg-transparent ">-->
-<!--            <button type="button" class="btn btn-outline-success fw-bold float-end" onclick="adicionarUsuario()">Adicionar Usuário</button>-->
-<!--            <button type="button" class="btn btn-outline-primary fw-bold float-end me-2" onclick="listarUsuarios()">Buscar</button>-->
-<!--            <button type="button" class="btn btn-outline-warning fw-bold float-end me-2" onclick="editarUsuario()">Editar</button>-->
-<!--            <button type="button" class="btn btn-outline-danger fw-bold float-end me-2" onclick="excluirUsuario()">Excluir Usuário</button>-->
+<!--            <button type="button" class="btn btn-outline-success fw-bold float-end" onclick="adicionarUsuario()">-->
+<!--                Adicionar Usuário-->
+<!--            </button>-->
+<!--            <button type="button" class="btn btn-outline-primary fw-bold float-end me-2" onclick="listarUsuarios()">-->
+<!--                Buscar-->
+<!--            </button>-->
+<!--            <button type="button" class="btn btn-outline-warning fw-bold float-end me-2" onclick="editarUsuario()">-->
+<!--                Editar-->
+<!--            </button>-->
+<!--            <button type="button" class="btn btn-outline-danger fw-bold float-end me-2" onclick="excluirUsuario()">-->
+<!--                Excluir Usuário-->
+<!--            </button>-->
 <!--        </div>-->
 <!--    </div>-->
 

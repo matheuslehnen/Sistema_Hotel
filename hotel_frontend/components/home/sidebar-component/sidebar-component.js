@@ -9,7 +9,7 @@ function sidebarTemplate(){
         '            <div class="list-group list-group-flush">\n' +
         '                <a href="#" class="list-group-item list-group-item-action list-group-item-light p-3" onclick="quartoComponent()">Quartos</a>\n' +
         '                <a href="#" class="list-group-item list-group-item-action list-group-item-light p-3" onclick="clienteComponent()">Clientes</a>\n' +
-        '                <a href="#" class="list-group-item list-group-item-action list-group-item-light p-3" onclick="hospedagemComponent()">Reservas</a>\n' +
+        '                <a href="#" class="list-group-item list-group-item-action list-group-item-light p-3" onclick="hospedagemComponent()">Hospedagens</a>\n' +
         '                <a href="#" class="list-group-item list-group-item-action list-group-item-light p-3" onclick="usuarioComponent()">Usuários</a>\n' +
         '\n' +
         '            </div>\n' +

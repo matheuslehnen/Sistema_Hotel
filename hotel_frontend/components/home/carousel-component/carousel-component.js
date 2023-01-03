@@ -1,5 +1,5 @@
 function carouselTemplate(){
-    return '<div id="carousel-component" class="carousel slide" data-bs-ride="carousel">\n' +
+    return '<div id="carousel-component" class="carousel slide w-75" data-bs-ride="carousel">\n' +
         '        <div class="carousel-indicators">\n' +
         '            <button type="button" data-bs-target="#carousel-component" data-bs-slide-to="0" class="active"\n' +
         '                    aria-current="true" aria-label="Slide 1"></button>\n' +

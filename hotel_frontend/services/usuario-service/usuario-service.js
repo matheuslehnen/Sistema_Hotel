@@ -3,19 +3,15 @@ function adicionarUsuario(login, senha) {
         login: login.value,
         senha: senha.value,
     }
-
     $.ajax({
         type: "POST",
         url: url + "/usuario",
         data: JSON.stringify(usuarioForm),
     })
         .then((response) => {
-            //colocar um alert fal
-            if(window.sessionStorage.getItem('logado')){
-                carouselComponent()
-            } else {
-                loginComponent();
-            }
+            alert('Usuário adicionado com sucesso');
+            usuarioComponent();
+            closeSidebar()
 
         });
 }
@@ -27,37 +23,63 @@ function listarUsuarios() {
         url: url + "/usuario"
     })
         .then((data) => {
-            data.forEach(user => {
-                $("#table-body").append(
-                    '    <tr class="table-data">\n' +
-                    '        <th scope="row">' + user.id + '</th>\n' +
-                    '        <td>' + user.login + '</td>\n' +
-                    '        <td>' + user.senha + '</td>\n' +
-                    '    </tr>')
+            data.forEach(usuario => {
+                insereDadosNaTabela(usuario);
             })
         })
+
 }
 
-function editarUsuario(id) {
+function editarUsuario(login, senha, idUsuario) {
+    const usuarioForm = {
+        login: login.value,
+        senha: senha.value,
+    }
+    //ABRIR UM CARD COM UM NOVO FORMULARIO PARA PREENCHER OS DADOS NOVAMENTE E ENVIAR
     $.ajax({
         type: "PUT",
-        url: url + "/usuario" + id
+        url: url + "/usuario/" + idUsuario,
+        data: JSON.stringify(usuarioForm)
     })
         .then((data) => {
-            console.log(data);
+            usuarioComponent();
+            listarUsuarios();
         })
 }
 
-function excluirUsuario(id) {
+function excluirUsuario() {
+    const idUsuario = selecionaUsuario();
     $.ajax({
         type: "DELETE",
-        url: url + "/usuario" + id
+        url: url + "/usuario/" + idUsuario
     })
         .then((data) => {
-            console.log(data);
+            if (data === 1) {
+                removeLinhaTabela(idUsuario);
+            } else {
+                console.log("Criar um alert informando que erro ao deletar")
+            }
         })
 }
 
-function limparTabela(){
-    $(".table-data").remove();
+
+function selecionaUsuario() {
+    return $("#usuario-input-radio:checked").val();
+}
+
+function removeLinhaTabela(idUsuario){
+    return $("#usuario-table-row" + idUsuario).remove();
+}
+
+function insereDadosNaTabela(usuario) {
+    $("#table-body").append(
+        '<tr class="table-data text-dark" id="usuario-table-row' + usuario.id + '" onclick="selecionaUsuario()">\n' +
+        '     <th scope="row">\n' +
+        '         <input class="form-check-input" type="radio" id="usuario-input-radio" name="usuario-input-radio" value="' + usuario.id + '">\n' +
+        '         <label class="form-check-label" for="flexRadioDefault1"></label>\n' +
+        '     </th>\n' +
+        '     <td>' + usuario.id + '</td>\n' +
+        '     <td >' + usuario.login + '</td>\n' +
+        '     <td>' + usuario.senha + '</td>\n' +
+        '</tr>')
 }

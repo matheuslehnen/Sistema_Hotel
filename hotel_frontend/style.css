@@ -1,7 +1,13 @@
+#menu{
+    transition: 0.8s;
+
+}
 
 #menu-title{
     text-decoration: none;
 }
+
+
 
 footer{
     background-color: #ECEFF1;
