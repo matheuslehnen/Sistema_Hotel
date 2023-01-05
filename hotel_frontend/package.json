@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^3.6.0"
-  },
-  "devDependencies": {
+    "jquery": "^3.6.0",
+    "jquery-mask-plugin": "^1.14.16",
+    "jquery-maskmoney": "^3.0.2"
   }
 }

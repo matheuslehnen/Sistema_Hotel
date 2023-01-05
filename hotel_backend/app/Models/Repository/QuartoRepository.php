@@ -25,6 +25,19 @@ class QuartoRepository extends EntityRepository
         return $this->find($id);
     }
 
+    public function listarTodosVagos()
+    {
+        return $this->findBy(['situacao' => 'Vago']);
+    }
+
+    public function listarTodosVagosParaCliente($fumante)
+    {
+        return $this->findBy([
+            'permiteFumante' => $fumante,
+            'situacao' => 'Vago'
+        ]);
+    }
+
     public function save(Quarto $quarto)
     {
         $this->getEntityManager()->persist($quarto);
@@ -48,4 +61,6 @@ class QuartoRepository extends EntityRepository
 
         return $quarto->getId() == null;
     }
+
+
 }

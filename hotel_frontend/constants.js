@@ -31,3 +31,12 @@ const HOSPEDAGEMCHECKOUTCOMPONENT = "#hospedagem-checkout-component";
 const USUARIOCOMPONENT = "#usuario-component";
 const USUARIOCADASTROCOMPONENT = "#usuario-cadastro-component";
 const USUARIOEDITARCOMPONENT = "#usuario-editar-component";
+
+/* Constantes de seleção de Usuário */
+const maskMoney = {
+    prefix:'R$ ',
+    allowNegative: false,
+    thousands:'.',
+    decimal:',',
+    affixesStay: false,
+}

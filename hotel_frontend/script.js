@@ -73,3 +73,10 @@ function removeTemplatesUsuario(){
 function limparTabela() {
     return $(".table-data").remove();
 }
+
+function aplicaMascaraClienteForm() {
+    $('.cpf').mask('000.000.000-00', {reverse: true});
+    $('.phone_with_ddd').mask('(00) 0000-0000');
+    $('.date').mask('00/00/0000');
+    $('.cep').mask('00000-000');
+}

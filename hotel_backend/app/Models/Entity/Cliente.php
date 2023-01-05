@@ -7,12 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Cliente
  *
- * @ORM\Table(name="clientes", indexes={@ORM\Index(name="clientes_id_contato_foreign", columns={"id_contato"}), @ORM\Index(name="clientes_id_usuario_foreign", columns={"id_usuario"}), @ORM\Index(name="clientes_id_endereco_foreign", columns={"id_endereco"})})
- * @ORM\Entity(repositoryClass="App\Models\Repository\ClienteRepository")
+ * @ORM\Table(name="clientes", indexes={@ORM\Index(name="clientes_id_endereco_foreign", columns={"id_endereco"}), @ORM\Index(name="clientes_id_contato_foreign", columns={"id_contato"})})
+ * @ORM\Entity
  */
 class Cliente
 {
     /**
+     * @var int
+     *
      * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -29,7 +31,7 @@ class Cliente
     /**
      * @var string
      *
-     * @ORM\Column(name="cpf", type="string", length=11, nullable=false)
+     * @ORM\Column(name="cpf", type="string", length=14, nullable=false)
      */
     private $cpf;
 
@@ -68,23 +70,12 @@ class Cliente
     private $idEndereco;
 
     /**
-     * @var \App\Models\Entity\Usuario
-     *
-     * @ORM\ManyToOne(targetEntity="App\Models\Entity\Usuario")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_usuario", referencedColumnName="id")
-     * })
-     */
-    private $idUsuario;
-
-    /**
      * @param string $nome
      * @param string $cpf
      * @param string $nascimento
      * @param bool $fumante
-     * @param Endereco $idEndereco
-     * @param Usuario $idUsuario
      * @param Contato $idContato
+     * @param Endereco $idEndereco
      */
     public function __construct(string $nome, string $cpf, string $nascimento, bool $fumante, Contato $idContato, Endereco $idEndereco)
     {
@@ -96,89 +87,101 @@ class Cliente
         $this->idEndereco = $idEndereco;
     }
 
-
-    public function getId(): int
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function setId(int $id): void
+    /**
+     * Set nome.
+     *
+     * @param string $nome
+     *
+     * @return Cliente
+     */
+    public function setNome($nome)
     {
-        $this->id = $id;
+        $this->nome = $nome;
+
+        return $this;
     }
 
-    public function getNome(): string
+    /**
+     * Get nome.
+     *
+     * @return string
+     */
+    public function getNome()
     {
         return $this->nome;
     }
 
-    public function setNome(string $nome): void
+    /**
+     * Set cpf.
+     *
+     * @param string $cpf
+     *
+     * @return Cliente
+     */
+    public function setCpf($cpf)
     {
-        $this->nome = $nome;
+        $this->cpf = $cpf;
+
+        return $this;
     }
 
-    public function getCpf(): string
+    /**
+     * Get cpf.
+     *
+     * @return string
+     */
+    public function getCpf()
     {
         return $this->cpf;
     }
 
-    public function setCpf(string $cpf): void
+    /**
+     * Set nascimento.
+     *
+     * @param string $nascimento
+     *
+     * @return Cliente
+     */
+    public function setNascimento($nascimento)
     {
-        $this->cpf = $cpf;
+        $this->nascimento = $nascimento;
+
+        return $this;
     }
 
-    public function getNascimento(): string
+    /**
+     * Get nascimento.
+     *
+     * @return string
+     */
+    public function getNascimento()
     {
         return $this->nascimento;
     }
 
-    public function setNascimento(string $nascimento): void
-    {
-        $this->nascimento = $nascimento;
-    }
-
-    public function isFumante(): bool
-    {
-        return $this->fumante;
-    }
-
-    public function setFumante(bool $fumante): void
+    /**
+     * Set fumante.
+     *
+     * @param bool $fumante
+     *
+     * @return Cliente
+     */
+    public function setFumante($fumante)
     {
         $this->fumante = $fumante;
+
+        return $this;
     }
-
-    public function getIdContato(): Contato
-    {
-        return $this->idContato;
-    }
-
-    public function setIdContato(Contato $idContato): void
-    {
-        $this->idContato = $idContato;
-    }
-
-    public function getIdEndereco(): Endereco
-    {
-        return $this->idEndereco;
-    }
-
-    public function setIdEndereco(Endereco $idEndereco): void
-    {
-        $this->idEndereco = $idEndereco;
-    }
-
-    public function getIdUsuario(): Usuario
-    {
-        return $this->idUsuario;
-    }
-
-    public function setIdUsuario(Usuario $idUsuario): void
-    {
-        $this->idUsuario = $idUsuario;
-    }
-
-
-
 
     /**
      * Get fumante.
@@ -188,5 +191,53 @@ class Cliente
     public function getFumante()
     {
         return $this->fumante;
+    }
+
+    /**
+     * Set idContato.
+     *
+     * @param \App\Models\Entity\Contato|null $idContato
+     *
+     * @return Cliente
+     */
+    public function setIdContato(\App\Models\Entity\Contato $idContato = null)
+    {
+        $this->idContato = $idContato;
+
+        return $this;
+    }
+
+    /**
+     * Get idContato.
+     *
+     * @return \App\Models\Entity\Contato|null
+     */
+    public function getIdContato()
+    {
+        return $this->idContato;
+    }
+
+    /**
+     * Set idEndereco.
+     *
+     * @param \App\Models\Entity\Endereco|null $idEndereco
+     *
+     * @return Cliente
+     */
+    public function setIdEndereco(\App\Models\Entity\Endereco $idEndereco = null)
+    {
+        $this->idEndereco = $idEndereco;
+
+        return $this;
+    }
+
+    /**
+     * Get idEndereco.
+     *
+     * @return \App\Models\Entity\Endereco|null
+     */
+    public function getIdEndereco()
+    {
+        return $this->idEndereco;
     }
 }

@@ -1,7 +1,15 @@
 #menu{
     transition: 0.8s;
-
 }
+
+.form-switch{
+    transform: scale(1.2);
+}
+
+.form-check .form-check-input {
+    margin-left: 0;
+}
+
 
 #menu-title{
     text-decoration: none;

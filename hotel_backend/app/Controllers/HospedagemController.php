@@ -14,8 +14,6 @@ class HospedagemController extends ResourceController
     public function __construct()
     {
         $this->hospedagemService = new HospedagemService();
-        header('Access-Control-Allow-Origin: *');
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     }
 
     public function index(): Response

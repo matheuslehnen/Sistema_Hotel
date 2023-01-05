@@ -8,14 +8,14 @@ function loginTemplate(){
         '                            <p class="text-dark-50 mb-5">Por favor insira seu login-service e senha!</p>\n' +
         '                            <form method="post">\n' +
         '                            <div class="form-outline form-white mb-4">\n' +
-        '                                <input type="text" id="login" name="login" placeholder="Usuário" class="form-control form-control-lg" />\n' +
+        '                                <input type="text" id="usuario-login-logar" name="usuario-login-logar" placeholder="Usuário" class="form-control form-control-lg" />\n' +
         '                            </div>\n' +
         '                            <div class="form-outline form-white mb-4">\n' +
-        '                                <input type="password" id="senha" name="senha" placeholder="Senha" class="form-control form-control-lg" />\n' +
+        '                                <input type="password" id="usuario-login-senha" name="usuario-login-senha" placeholder="Senha" class="form-control form-control-lg" />\n' +
         '                            </div>\n' +
         '                            <p class="small pb-lg-2 "><button class="btn btn-link">Esqueceu sua senha?</button></p>\n' +
         '\n' +
-        '                            <button class="btn btn-outline-primary btn-lg px-5 " type="button" onclick="logar(login, senha)">Login</button>\n' +
+        '                            <button class="btn btn-outline-primary btn-lg px-5 " type="button" onclick="logar()">Login</button>\n' +
         '                            </form>\n' +
         '                            <div class="d-flex justify-content-center text-center mt-4 pt-1">\n' +
         '                                <a href="#!" class="text-dark-"><i class="fab fa-facebook-f fa-lg"></i></a>\n' +

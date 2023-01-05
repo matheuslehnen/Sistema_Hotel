@@ -1,85 +1,90 @@
-function adicionarUsuario(login, senha) {
-    const usuarioForm = {
-        login: login.value,
-        senha: senha.value,
+function adicionarUsuario() {
+    const cadastrarUsuarioForm = {
+        login: $("#usuario-cadastro-login").val(),
+        senha: $("#usuario-cadastro-senha").val(),
     }
     $.ajax({
         type: "POST",
         url: url + "/usuario",
-        data: JSON.stringify(usuarioForm),
-    })
-        .then((response) => {
-            alert('Usuário adicionado com sucesso');
+        data: JSON.stringify(cadastrarUsuarioForm),
+        success: (response) => {
             usuarioComponent();
             closeSidebar()
-
-        });
+            listarUsuarios()
+        },
+        error: (response) => {
+            console.log(response)
+        }
+    })
 }
 
 function listarUsuarios() {
     limparTabela();
     $.ajax({
         type: "GET",
-        url: url + "/usuario"
-    })
-        .then((data) => {
-            data.forEach(usuario => {
-                insereDadosNaTabela(usuario);
+        url: url + "/usuario",
+        success: (response) => {
+            response.forEach(usuario => {
+                insereDadosNaTabelaUsuario(usuario);
             })
-        })
-
+        },
+        error: (response) => {
+            console.log(response)
+        }
+    })
 }
 
-function editarUsuario(login, senha, idUsuario) {
-    const usuarioForm = {
-        login: login.value,
-        senha: senha.value,
+function editarUsuario(idUsuario) {
+    const editarUsuarioForm = {
+        login: $("#usuario-editar-login").val(),
+        senha: $("#usuario-editar-senha").val()
     }
-    //ABRIR UM CARD COM UM NOVO FORMULARIO PARA PREENCHER OS DADOS NOVAMENTE E ENVIAR
     $.ajax({
         type: "PUT",
         url: url + "/usuario/" + idUsuario,
-        data: JSON.stringify(usuarioForm)
-    })
-        .then((data) => {
+        data: JSON.stringify(editarUsuarioForm),
+        success: () => {
             usuarioComponent();
             listarUsuarios();
-        })
+        },
+        error: (response) => {
+            console.log(response)
+        }
+    })
 }
 
 function excluirUsuario() {
-    const idUsuario = selecionaUsuario();
-    $.ajax({
-        type: "DELETE",
-        url: url + "/usuario/" + idUsuario
-    })
-        .then((data) => {
-            if (data === 1) {
-                removeLinhaTabela(idUsuario);
-            } else {
+    const idUsuario = $("#usuario-input-radio:checked").val();
+    if(idUsuario){
+        $.ajax({
+            type: "DELETE",
+            url: url + "/usuario/" + idUsuario,
+            success: () => {
+                removeLinhaTabelaUsuario(idUsuario);
+            },
+            error: (response) => {
+                console.log(response);
                 console.log("Criar um alert informando que erro ao deletar")
             }
         })
+    } else {
+        alert("Selecione um usuário primeiro.");
+    }
 }
 
-
-function selecionaUsuario() {
-    return $("#usuario-input-radio:checked").val();
-}
-
-function removeLinhaTabela(idUsuario){
+function removeLinhaTabelaUsuario(idUsuario){
     return $("#usuario-table-row" + idUsuario).remove();
 }
 
-function insereDadosNaTabela(usuario) {
+function insereDadosNaTabelaUsuario(usuario) {
     $("#table-body").append(
-        '<tr class="table-data text-dark" id="usuario-table-row' + usuario.id + '" onclick="selecionaUsuario()">\n' +
+        '<tr class="table-data text-dark" id="usuario-table-row' + usuario.id + '">\n' +
         '     <th scope="row">\n' +
-        '         <input class="form-check-input" type="radio" id="usuario-input-radio" name="usuario-input-radio" value="' + usuario.id + '">\n' +
-        '         <label class="form-check-label" for="flexRadioDefault1"></label>\n' +
+        '         <input class="form-check-input" type="radio" id="usuario-input-radio" value="' + usuario.id + '">\n' +
+        '         <label class="form-check-label" for="usuario-input-radio"></label>\n' +
         '     </th>\n' +
-        '     <td>' + usuario.id + '</td>\n' +
-        '     <td >' + usuario.login + '</td>\n' +
-        '     <td>' + usuario.senha + '</td>\n' +
+        '     <td class="text-center">' + usuario.id + '</td>\n' +
+        '     <td class="text-center">' + usuario.login + '</td>\n' +
+        '     <td class="text-center">' + usuario.senha + '</td>\n' +
         '</tr>')
 }

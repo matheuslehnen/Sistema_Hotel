@@ -24,16 +24,16 @@ class Quarto
     /**
      * @var string
      *
-     * @ORM\Column(name="localizacao", type="string", length=50, nullable=false)
+     * @ORM\Column(name="localizacao", type="string", length=5, nullable=false)
      */
     private $localizacao;
 
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="permite_fumante", type="boolean", nullable=false)
+     * @ORM\Column(name="tipo", type="string", length=20, nullable=false)
      */
-    private $permiteFumante;
+    private $tipo;
 
     /**
      * @var int
@@ -43,32 +43,32 @@ class Quarto
     private $valor;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="capacidade", type="bigint", nullable=false, options={"unsigned"=true})
-     */
-    private $capacidade;
-
-    /**
      * @var bool
      *
-     * @ORM\Column(name="situacao", type="boolean", nullable=false)
+     * @ORM\Column(name="permite_fumante", type="boolean", nullable=false)
+     */
+    private $permiteFumante;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="situacao", type="string", length=7, nullable=false)
      */
     private $situacao;
 
     /**
      * @param string $localizacao
+     * @param string $tipo
+     * @param int $valor
      * @param bool $permiteFumante
-     * @param int $
-     * @param int $capacidade
-     * @param bool $situacao
+     * @param string $situacao
      */
-    public function __construct(string $localizacao, bool $permiteFumante, int $valor, int $capacidade, bool $situacao)
+    public function __construct(string $localizacao, string $tipo, int $valor, bool $permiteFumante, string $situacao)
     {
         $this->localizacao = $localizacao;
-        $this->permiteFumante = $permiteFumante;
+        $this->tipo = $tipo;
         $this->valor = $valor;
-        $this->capacidade = $capacidade;
+        $this->permiteFumante = $permiteFumante;
         $this->situacao = $situacao;
     }
 
@@ -88,7 +88,7 @@ class Quarto
      *
      * @param string $localizacao
      *
-     * @return Quarto
+     * @return Quartos
      */
     public function setLocalizacao($localizacao)
     {
@@ -108,27 +108,27 @@ class Quarto
     }
 
     /**
-     * Set permiteFumante.
+     * Set tipo.
      *
-     * @param bool $permiteFumante
+     * @param string $tipo
      *
-     * @return Quarto
+     * @return Quartos
      */
-    public function setPermiteFumante($permiteFumante)
+    public function setTipo($tipo)
     {
-        $this->permiteFumante = $permiteFumante;
+        $this->tipo = $tipo;
 
         return $this;
     }
 
     /**
-     * Get permiteFumante.
+     * Get tipo.
      *
-     * @return bool
+     * @return string
      */
-    public function getPermiteFumante()
+    public function getTipo()
     {
-        return $this->permiteFumante;
+        return $this->tipo;
     }
 
     /**
@@ -136,7 +136,7 @@ class Quarto
      *
      * @param int $valor
      *
-     * @return Quarto
+     * @return Quartos
      */
     public function setValor($valor)
     {
@@ -156,35 +156,35 @@ class Quarto
     }
 
     /**
-     * Set capacidade.
+     * Set permiteFumante.
      *
-     * @param int $capacidade
+     * @param bool $permiteFumante
      *
-     * @return Quarto
+     * @return Quartos
      */
-    public function setCapacidade($capacidade)
+    public function setPermiteFumante($permiteFumante)
     {
-        $this->capacidade = $capacidade;
+        $this->permiteFumante = $permiteFumante;
 
         return $this;
     }
 
     /**
-     * Get capacidade.
+     * Get permiteFumante.
      *
-     * @return int
+     * @return bool
      */
-    public function getCapacidade()
+    public function getPermiteFumante()
     {
-        return $this->capacidade;
+        return $this->permiteFumante;
     }
 
     /**
      * Set situacao.
      *
-     * @param bool $situacao
+     * @param string $situacao
      *
-     * @return Quarto
+     * @return Quartos
      */
     public function setSituacao($situacao)
     {
@@ -196,7 +196,7 @@ class Quarto
     /**
      * Get situacao.
      *
-     * @return bool
+     * @return string
      */
     public function getSituacao()
     {

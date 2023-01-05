@@ -7,7 +7,6 @@ use App\Models\Entity\Cliente;
 use App\Models\Repository\ClienteRepository;
 use App\Models\Repository\ContatoRepository;
 use App\Models\Repository\EnderecoRepository;
-use App\Models\Repository\UsuarioRepository;
 use Daycry\Doctrine\Doctrine;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -22,7 +21,6 @@ class ClienteService
     private UsuarioService $usuarioService;
     private ContatoRepository $contatoRepository;
     private EnderecoRepository $enderecoRepository;
-    private UsuarioRepository $usuarioRepository;
     private ClienteRepository $clienteRepository;
     private array $encoders;
     private array $normalizer;
@@ -34,10 +32,8 @@ class ClienteService
         $this->doctrine = new Doctrine();
         $this->contatoService = new ContatoService();
         $this->enderecoService = new EnderecoService();
-        $this->usuarioService = new UsuarioService();
         $this->contatoRepository = new ContatoRepository($this->doctrine->em, $this->doctrine->em->getClassMetadata('App\Models\Entity\Contato'));
         $this->enderecoRepository = new EnderecoRepository($this->doctrine->em, $this->doctrine->em->getClassMetadata('App\Models\Entity\Endereco'));
-        $this->usuarioRepository = new UsuarioRepository($this->doctrine->em, $this->doctrine->em->getClassMetadata('App\Models\Entity\Usuario'));
         $this->clienteRepository = new ClienteRepository($this->doctrine->em, $this->doctrine->em->getClassMetadata('App\Models\Entity\Cliente'));
         $this->encoders = [
             new XmlEncoder(),
@@ -62,13 +58,18 @@ class ClienteService
         return $this->serializer->serialize($cliente, $this->format);
     }
 
+    public function listarPorCpf($cpf)
+    {
+        $cliente = $this->clienteRepository->listarPorCpf($cpf);
+        return $this->serializer->serialize($cliente, $this->format);
+    }
+
     public function save(?string $getBody): string
     {
         $request = $this->serializer->decode($getBody, $this->format);
 
         $contato = $this->contatoService->convert($request['idContato']);
         $endereco = $this->enderecoService->convert($request['idEndereco']);
-        $usuario = $this->usuarioService->convert($request['idUsuario']);
         $this->contatoRepository->save($contato);
         $this->enderecoRepository->save($endereco);
 
@@ -89,24 +90,22 @@ class ClienteService
     {
         $request = $this->serializer->decode($getBody, $this->format);
 
-        $clienteAntigo = $this->clienteRepository->listarPorId($id);
+        $cliente = $this->clienteRepository->listarPorId($id);
 
-        $clienteAntigo->setNome($request['nome']);
-        $clienteAntigo->setCpf($request['cpf']);
-        $clienteAntigo->setNascimento($request['nascimento']);
-        $clienteAntigo->setFumante($request['fumante']);
-        $clienteAntigo->getIdContato()->setEmail($request['idContato']['email']);
-        $clienteAntigo->getIdContato()->setTelefone($request['idContato']['telefone']);
-        $clienteAntigo->getIdEndereco()->setCep($request['idEndereco']['cep']);
-        $clienteAntigo->getIdEndereco()->setLogradouro($request['idEndereco']['logradouro']);
-        $clienteAntigo->getIdEndereco()->setNumero($request['idEndereco']['numero']);
-        $clienteAntigo->getIdEndereco()->setBairro($request['idEndereco']['bairro']);
-        $clienteAntigo->getIdEndereco()->setLocalidade($request['idEndereco']['localidade']);
-        $clienteAntigo->getIdEndereco()->setUf($request['idEndereco']['uf']);
-        $clienteAntigo->getIdUsuario()->setLogin($request['idUsuario']['login']);
-        $clienteAntigo->getIdUsuario()->setSenha( $request['idUsuario']['senha']);
+        $cliente->setNome($request['nome']);
+        $cliente->setCpf($request['cpf']);
+        $cliente->setNascimento($request['nascimento']);
+        $cliente->setFumante($request['fumante']);
+        $cliente->getIdContato()->setEmail($request['idContato']['email']);
+        $cliente->getIdContato()->setTelefone($request['idContato']['telefone']);
+        $cliente->getIdEndereco()->setCep($request['idEndereco']['cep']);
+        $cliente->getIdEndereco()->setLogradouro($request['idEndereco']['logradouro']);
+        $cliente->getIdEndereco()->setNumero($request['idEndereco']['numero']);
+        $cliente->getIdEndereco()->setBairro($request['idEndereco']['bairro']);
+        $cliente->getIdEndereco()->setLocalidade($request['idEndereco']['localidade']);
+        $cliente->getIdEndereco()->setUf($request['idEndereco']['uf']);
 
-        $clienteDto = $this->clienteRepository->update($clienteAntigo, $id);
+        $clienteDto = $this->clienteRepository->update($cliente, $id);
         return $this->serializer->serialize($clienteDto, $this->format);
     }
 
@@ -115,12 +114,12 @@ class ClienteService
         if(!empty($cliente)){
             $this->contatoRepository->delete($cliente->getIdContato());
             $this->enderecoRepository->delete($cliente->getIdEndereco());
-            $this->usuarioRepository->delete($cliente->getIdUsuario());
-            $this->clienteRepository->delete($cliente);
-            return 'Cliente excluído com sucesso!';
+            return $this->clienteRepository->delete($cliente);
         } else {
-            return 'Cliente Não Encontrado';
+            return false;
         }
     }
+
+
 
 }

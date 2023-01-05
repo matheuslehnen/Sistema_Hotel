@@ -16,14 +16,15 @@ class CreateEnderecoTable extends Migration
            ],
            'cep' => [
                'type' => 'VARCHAR',
-               'constraint' => 8
+               'constraint' => 9
            ],
            'logradouro' => [
                'type' => 'VARCHAR',
                'constraint' => 100
            ],
            'numero' => [
-               'type' => 'INT'
+               'type' => 'VARCHAR',
+               'constraint' => 100
            ],
            'bairro' => [
                'type' => 'VARCHAR',

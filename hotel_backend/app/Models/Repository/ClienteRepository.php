@@ -25,7 +25,7 @@ class ClienteRepository extends EntityRepository
         return $this->find($id);
     }
 
-    public function listaPorCpf($cpf){
+    public function listarPorCpf($cpf){
         return $this->findOneBy(['cpf' => $cpf]);
     }
 
@@ -49,5 +49,7 @@ class ClienteRepository extends EntityRepository
     {
         $this->getEntityManager()->remove($cliente);
         $this->getEntityManager()->flush();
+
+        return $cliente->getId() == null;
     }
 }

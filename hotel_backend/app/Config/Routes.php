@@ -43,6 +43,8 @@ $routes->resource('api/quarto', ['controller' => 'QuartoController']);
 $routes->resource('api/hospedagem', ['controller' => 'HospedagemController']);
 
 $routes->post('api/usuario/login', 'UsuarioController::login');
+$routes->get('api/quartos/listar-vagos', 'QuartoController::listarVagos');
+$routes->get('api/quartos/listar-vagos-para-cliente/(:segment)', 'QuartoController::listarVagosParaCliente/$1');
 
 /*
  * --------------------------------------------------------------------

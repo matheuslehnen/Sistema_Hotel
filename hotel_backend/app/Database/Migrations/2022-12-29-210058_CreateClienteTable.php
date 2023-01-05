@@ -20,7 +20,7 @@ class CreateClienteTable extends Migration
             ],
             'cpf' => [
                 'type' => 'VARCHAR',
-                'constraint' => 11
+                'constraint' => 14
             ],
             'nascimento'=> [
                 'type' => 'VARCHAR',
@@ -36,17 +36,12 @@ class CreateClienteTable extends Migration
             'id_contato' => [
                 'type' => 'INT',
                 'unsigned' => true
-            ],
-            'id_usuario' => [
-                'type' => 'INT',
-                'unsigned' => true
             ]
         ];
         $this->forge->addField($fields);
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('id_endereco', 'enderecos', 'id');
         $this->forge->addForeignKey('id_contato', 'contatos', 'id');
-        $this->forge->addForeignKey('id_usuario', 'usuarios', 'id');
         $this->forge->createTable('clientes', true, ['engine' => 'innodb']);
     }
 

@@ -25,7 +25,7 @@ class Endereco
     /**
      * @var string
      *
-     * @ORM\Column(name="cep", type="string", length=8, nullable=false)
+     * @ORM\Column(name="cep", type="string", length=9, nullable=false)
      */
     private $cep;
 
@@ -37,9 +37,9 @@ class Endereco
     private $logradouro;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="numero", type="integer", nullable=false)
+     * @ORM\Column(name="numero", type="string", length=100, nullable=false)
      */
     private $numero;
 
@@ -67,12 +67,12 @@ class Endereco
     /**
      * @param string $cep
      * @param string $logradouro
-     * @param int $numero
+     * @param string $numero
      * @param string $bairro
      * @param string $localidade
      * @param string $uf
      */
-    public function __construct(string $cep, string $logradouro, int $numero, string $bairro, string $localidade, string $uf)
+    public function __construct(string $cep, string $logradouro, string $numero, string $bairro, string $localidade, string $uf)
     {
         $this->cep = $cep;
         $this->logradouro = $logradouro;
@@ -144,7 +144,7 @@ class Endereco
     /**
      * Set numero.
      *
-     * @param int $numero
+     * @param string $numero
      *
      * @return Endereco
      */
@@ -158,7 +158,7 @@ class Endereco
     /**
      * Get numero.
      *
-     * @return int
+     * @return string
      */
     public function getNumero()
     {

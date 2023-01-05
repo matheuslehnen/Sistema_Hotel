@@ -15,8 +15,6 @@ class QuartoController extends ResourceController
     public function __construct()
     {
         $this->quartoService = new QuartoService();
-        header('Access-Control-Allow-Origin: *');
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     }
 
     public function index(): Response
@@ -29,6 +27,18 @@ class QuartoController extends ResourceController
     {
         $quartoDto = $this->quartoService->listarUm($id);
         return $this->response->setJSON($quartoDto);
+    }
+
+    public function listarVagos()
+    {
+        $quartosDto = $this->quartoService->listarTodosVagos();
+        return $this->response->setJSON($quartosDto);
+    }
+
+    public function listarVagosParaCliente($cpf = null)
+    {
+        $quartosDto = $this->quartoService->listarTodosVagosParaCliente($cpf);
+        return $this->response->setJSON($quartosDto);
     }
 
     public function create(): Response
@@ -45,7 +55,9 @@ class QuartoController extends ResourceController
 
     public function delete($id = null)
     {
-        $quarto = $this->quartoService->delete($id);
-        return $this->response->setJSON($quarto);
+        $quartoDto = $this->quartoService->delete($id);
+        return $this->response->setJSON($quartoDto);
     }
+
+
 }

@@ -1,12 +1,12 @@
-function logar(login, senha) {
-    const usuario = {
-        login: login.value,
-        senha: senha.value
+function logar() {
+    const usuarioLogarForm = {
+        login: $("#usuario-login-logar").val(),
+        senha: $("#usuario-login-senha").val()
     }
     $.ajax({
         type: "POST",
         url: url + "/usuario/login",
-        data: JSON.stringify(usuario),
+        data: JSON.stringify(usuarioLogarForm),
     })
         .then((data) => {
             if(data.status === true){

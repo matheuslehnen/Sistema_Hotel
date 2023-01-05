@@ -25,6 +25,15 @@ class HospedagemRepository extends EntityRepository
         return $this->find($id);
     }
 
+    public function listarPorClienteId($id)
+    {
+        return $this->findOneBy(
+            ['idCliente' =>
+                ['id' => $id]
+            ]
+        );
+    }
+
     public function save(Hospedagem $hospedagem)
     {
         $this->getEntityManager()->persist($hospedagem);
@@ -48,4 +57,7 @@ class HospedagemRepository extends EntityRepository
 
         return $hospedagem->getId() == null;
     }
+
+
+
 }
