@@ -19,44 +19,44 @@ class QuartoController extends ResourceController
 
     public function index(): Response
     {
-        $quartosDto = $this->quartoService->listarTodos();
-        return $this->response->setJSON($quartosDto);
+        $response = $this->quartoService->listarTodos();
+        return $this->response->setJSON($response);
     }
 
     public function show($id = null): Response
     {
-        $quartoDto = $this->quartoService->listarUm($id);
-        return $this->response->setJSON($quartoDto);
+        $response = $this->quartoService->listarUm($id);
+        return $this->response->setJSON($response);
     }
 
     public function listarVagos()
     {
-        $quartosDto = $this->quartoService->listarTodosVagos();
-        return $this->response->setJSON($quartosDto);
+        $response = $this->quartoService->listarTodosVagos();
+        return $this->response->setJSON($response);
     }
 
     public function listarVagosParaCliente($cpf = null)
     {
-        $quartosDto = $this->quartoService->listarTodosVagosParaCliente($cpf);
-        return $this->response->setJSON($quartosDto);
+        $response = $this->quartoService->listarTodosVagosParaCliente($cpf);
+        return $this->response->setJSON($response);
     }
 
     public function create(): Response
     {
-        $quartoDto = $this->quartoService->save($this->request->getBody());
-        return $this->response->setJSON($quartoDto);
+        $response = $this->quartoService->save($this->request->getBody());
+        return $this->response->setJSON($response);
     }
 
     public function update($id = null)
     {
-        $quartoDto = $this->quartoService->update($this->request->getBody(), $id);
-        return $this->response->setJSON($quartoDto);
+        $response = $this->quartoService->update($this->request->getBody(), $id);
+        return $this->response->setJSON($response);
     }
 
     public function delete($id = null)
     {
-        $quartoDto = $this->quartoService->delete($id);
-        return $this->response->setJSON($quartoDto);
+        $response = $this->quartoService->delete($id);
+        return $this->response->setJSON($response);
     }
 
 

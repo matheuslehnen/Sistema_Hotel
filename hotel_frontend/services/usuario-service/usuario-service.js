@@ -1,86 +1,107 @@
 function adicionarUsuario() {
-    const cadastrarUsuarioForm = {
-        login: $("#usuario-cadastro-login").val(),
-        senha: $("#usuario-cadastro-senha").val(),
+    const usuarioForm = {
+        login: $(".usuario-login").val(),
+        senha: $(".usuario-senha").val(),
     }
     $.ajax({
         type: "POST",
         url: url + "/usuario",
-        data: JSON.stringify(cadastrarUsuarioForm),
+        data: JSON.stringify(usuarioForm),
         success: (response) => {
-            usuarioComponent();
-            closeSidebar()
-            listarUsuarios()
+            if (response.status) {
+                usuarioComponent();
+                closeSidebar()
+                listarUsuarios()
+            } else {
+                alert(response.motivo)
+            }
         },
         error: (response) => {
             console.log(response)
+            alert("Erro ao realizar a operação. Tente novamente.")
         }
     })
 }
 
 function listarUsuarios() {
     limparTabela();
+    closeSidebar();
     $.ajax({
         type: "GET",
         url: url + "/usuario",
         success: (response) => {
-            response.forEach(usuario => {
-                insereDadosNaTabelaUsuario(usuario);
-            })
+            if (response.status) {
+                response.usuarios.forEach(usuario => {
+                    insereDadosNaTabelaUsuario(usuario);
+                    ativaBotaoLimpar();
+                })
+            } else {
+                alert(response.motivo)
+            }
         },
         error: (response) => {
             console.log(response)
+            alert("Erro ao realizar a operação. Tente novamente.")
         }
     })
 }
 
-function editarUsuario(idUsuario) {
-    const editarUsuarioForm = {
-        login: $("#usuario-editar-login").val(),
-        senha: $("#usuario-editar-senha").val()
+function editarUsuario(id) {
+    const usuarioForm = {
+        login: $(".usuario-login").val(),
+        senha: $(".usuario-senha").val()
     }
     $.ajax({
         type: "PUT",
-        url: url + "/usuario/" + idUsuario,
-        data: JSON.stringify(editarUsuarioForm),
-        success: () => {
-            usuarioComponent();
-            listarUsuarios();
+        url: url + "/usuario/" + id,
+        data: JSON.stringify(usuarioForm),
+        success: (response) => {
+            if (response.status) {
+                usuarioComponent();
+                listarUsuarios();
+            } else {
+                alert(response.motivo);
+            }
         },
         error: (response) => {
             console.log(response)
+            alert("Erro ao realizar a operação. Tente novamente.")
         }
     })
 }
 
 function excluirUsuario() {
-    const idUsuario = $("#usuario-input-radio:checked").val();
-    if(idUsuario){
-        $.ajax({
-            type: "DELETE",
-            url: url + "/usuario/" + idUsuario,
-            success: () => {
-                removeLinhaTabelaUsuario(idUsuario);
-            },
-            error: (response) => {
-                console.log(response);
-                console.log("Criar um alert informando que erro ao deletar")
+    const id = $(".usuario-input-radio:checked").val();
+
+    $.ajax({
+        type: "DELETE",
+        url: url + "/usuario/" + id,
+        success: (response) => {
+            if (response.status) {
+                removeLinhaTabelaUsuario(id);
+            } else {
+                alert(response.motivo);
             }
-        })
-    } else {
-        alert("Selecione um usuário primeiro.");
+        },
+        error: (response) => {
+            console.log(response);
+            alert("Erro ao realizar a operação. Tente novamente.")
+        }
+    })
+}
+
+function removeLinhaTabelaUsuario(id) {
+    $(".usuario-table-row" + id).remove();
+    if (!$("#usuario-table-row").hasClass('table-data')) {
+        desativaBotoes();
     }
 }
 
-function removeLinhaTabelaUsuario(idUsuario){
-    return $("#usuario-table-row" + idUsuario).remove();
-}
-
 function insereDadosNaTabelaUsuario(usuario) {
-    $("#table-body").append(
-        '<tr class="table-data text-dark" id="usuario-table-row' + usuario.id + '">\n' +
+    $(".table-body").append(
+        '<tr class="text-dark table-data usuario-table-row' + usuario.id + '" id="usuario-table-row">\n' +
         '     <th scope="row">\n' +
-        '         <input class="form-check-input" type="radio" id="usuario-input-radio" value="' + usuario.id + '">\n' +
+        '         <input class="form-check-input usuario-input-radio" type="radio" name="usuario-input-radio" id="usuario-input-radio" value="' + usuario.id + '" onclick="ativaBotoesEditarExcluir()">\n' +
         '         <label class="form-check-label" for="usuario-input-radio"></label>\n' +
         '     </th>\n' +
         '     <td class="text-center">' + usuario.id + '</td>\n' +
@@ -88,3 +109,12 @@ function insereDadosNaTabelaUsuario(usuario) {
         '     <td class="text-center">' + usuario.senha + '</td>\n' +
         '</tr>')
 }
+
+function validaUsuarioFormFields() {
+    if ($(".usuario-login").val() && $(".usuario-senha").val()) {
+        $(".botao-enviar").attr("disabled", false);
+    } else {
+        $(".botao-enviar").attr("disabled", true);
+    }
+}
+

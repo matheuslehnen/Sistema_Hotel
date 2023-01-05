@@ -2,12 +2,16 @@
     transition: 0.8s;
 }
 
+.card{
+    border-radius: 1rem;
+}
+
 .form-switch{
     transform: scale(1.2);
 }
 
 .form-check .form-check-input {
-    margin-left: 0;
+    margin-left: 30px;
 }
 
 

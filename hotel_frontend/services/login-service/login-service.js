@@ -1,20 +1,20 @@
 function logar() {
     const usuarioLogarForm = {
-        login: $("#usuario-login-logar").val(),
-        senha: $("#usuario-login-senha").val()
+        login: $(".usuario-login").val(),
+        senha: $(".usuario-senha").val()
     }
     $.ajax({
         type: "POST",
         url: url + "/usuario/login",
         data: JSON.stringify(usuarioLogarForm),
     })
-        .then((data) => {
-            if(data.status === true){
-                window.sessionStorage.setItem('usuario', JSON.stringify(data.login));
+        .then((response) => {
+            if(response.status){
+                window.sessionStorage.setItem('usuario', JSON.stringify(response.usuario));
                 window.sessionStorage.setItem('logado', 'true');
                 window.location.reload();
             } else {
-                alert("Usuário ou senha incorretos!")
+                alert(response.motivo);
             }
         });
 }
@@ -23,6 +23,4 @@ function logout(){
     window.sessionStorage.clear();
     window.location.reload()
 }
-
-
 

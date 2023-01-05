@@ -19,44 +19,44 @@ class UsuarioController extends ResourceController
 
     public function index(): Response
     {
-        $usuariosDto = $this->usuarioService->listarTodos();
-        return $this->response->setJSON($usuariosDto);
+        $response = $this->usuarioService->listarTodos();
+        return $this->response->setJSON($response);
     }
 
     public function show($id = null): Response
     {
-        $usuarioDto = $this->usuarioService->listarPorId($id);
-        return $this->response->setJSON($usuarioDto);
+        $response = $this->usuarioService->listarPorId($id);
+        return $this->response->setJSON($response);
     }
 
     public function create(): Response
     {
-        $usuarioDto = $this->usuarioService->save($this->request->getBody());
-        return $this->response->setJSON($usuarioDto);
+        $response = $this->usuarioService->save($this->request->getBody());
+        return $this->response->setJSON($response);
     }
 
     public function update($id = null): Response
     {
-        $usuarioDto = $this->usuarioService->update($this->request->getBody(), $id);
-        return $this->response->setJSON($usuarioDto);
+        $response = $this->usuarioService->update($this->request->getBody(), $id);
+        return $this->response->setJSON($response);
     }
 
     public function delete($id = null): Response
     {
 
-        $usuarioDto = $this->usuarioService->delete($id);
-        return $this->response->setJSON($usuarioDto);
+        $response = $this->usuarioService->delete($id);
+        return $this->response->setJSON($response);
     }
 
     public function login(): Response
     {
-        $acessoDto = $this->usuarioService->login($this->request->getBody());
-        return $this->response->setJSON("$acessoDto");
+        $response = $this->usuarioService->login($this->request->getBody());
+        return $this->response->setJSON($response);
     }
 
     //public function recuperarSenha($email): Response
     //{
-    //    $recuperarSenhaDto = $this->usuarioService->recuperarSenha($email);
-    //    return $this->response->setJSON($recuperarSenhaDto);
+    //    $response = $this->usuarioService->recuperarSenha($email);
+    //    return $this->response->setJSON($response);
     //}
 }

@@ -2,7 +2,6 @@
 
 namespace App\Libraries\Services;
 
-use App\Models\Dto\AcessoDto;
 use App\Models\Entity\Usuario;
 use App\Models\Repository\UsuarioRepository;
 use Daycry\Doctrine\Doctrine;
@@ -29,7 +28,7 @@ class UsuarioService
         $this->encoders = [
             new XmlEncoder(),
             new JsonEncoder()
-            ];
+        ];
         $this->normalizers = [
             new GetSetMethodNormalizer()
         ];
@@ -39,43 +38,96 @@ class UsuarioService
 
     public function listarTodos(): string
     {
-        $usuarios = $this->usuarioRepository->listarTodos();
-        return $this->serializer->serialize($usuarios, $this->format);
+        $usuariosDto = $this->usuarioRepository->listarTodos();
+
+        if (!empty($usuariosDto)) {
+            $response = [
+                'status' => true,
+                'usuarios' => $usuariosDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Não existem usuários cadastrados.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function listarPorId($id): string
     {
-        $usuario = $this->usuarioRepository->listarPorId($id);
-        return $this->serializer->serialize($usuario, $this->format);
+        $usuarioDto = $this->usuarioRepository->listarPorId($id);
+
+        if (!empty($usuario)) {
+            $response = [
+                'status' => true,
+                'usuario' => $usuarioDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Usuário não encontrado.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function save(?string $getBody): string
     {
         $request = $this->serializer->decode($getBody, $this->format);
+
         $usuario = new Usuario(
             $request['login'],
             $request['senha'],
         );
         $usuarioDto = $this->usuarioRepository->save($usuario);
-        return $this->serializer->serialize($usuarioDto, $this->format);
+        $response = [
+            'status' => true,
+            'usuario' => $usuarioDto,
+        ];
+
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function update(?string $getBody, $id): string
     {
         $request = $this->serializer->decode($getBody, $this->format);
+        $usuario = $this->usuarioRepository->listarPorId($id);
 
-        $usuarioAntigo = $this->usuarioRepository->listarPorId($id);
-        $usuarioAntigo->setLogin($request['login']);
-        $usuarioAntigo->setSenha($request['senha']);
-
-        $usuarioDto = $this->usuarioRepository->update($usuarioAntigo);
-        return $this->serializer->serialize($usuarioDto, $this->format);
+        if(!empty($usuario)){
+            $usuario->setLogin($request['login']);
+            $usuario->setSenha($request['senha']);
+            $usuarioDto = $this->usuarioRepository->update($usuario);
+            $response = [
+                'status' => true,
+                'usuario' => $usuarioDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => "Usuário não encontrado.",
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function delete($id = null): string
     {
         $usuarioDto = $this->usuarioRepository->listarPorId($id);
-        return !empty($usuarioDto) && $this->usuarioRepository->delete($usuarioDto);
+
+        if(!empty($usuarioDto)){
+            $this->usuarioRepository->delete($usuarioDto);
+            $response = [
+                'status' => true,
+                'usuario' => null,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => "Usuário não encontrado.",
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function login(?string $getBody): string
@@ -83,22 +135,25 @@ class UsuarioService
         $request = $this->serializer->decode($getBody, $this->format);
         $usuario = $this->usuarioRepository->listarPorLogin($request['login']);
 
-        if($usuario != null && $request['senha'] == $usuario->getSenha()){
-            $acesso = new AcessoDto(
-                $usuario->getId(),
-                $usuario->getLogin(),
-                true
-            );
-
+        if (!empty($usuario) && $request['senha'] == $usuario->getSenha()) {
+            $response = [
+                'status' => true,
+                'usuario' => $usuario,
+            ];
         } else {
-            $acesso = new AcessoDto(
-                null,
-                $request['login'],
-                false
-            );
+            if(empty($usuario)) {
+                $response = [
+                    'status' => false,
+                    'motivo' => "Usuário não encontrado.",
+                ];
+            } else {
+                $response = [
+                    'status' => false,
+                    'motivo' => "Senha incorreta.",
+                ];
+            }
         }
-
-        return $this->serializer->serialize($acesso, $this->format);
+        return $this->serializer->serialize($response, $this->format);
     }
 
     //public function recuperarSenha($email): string
@@ -120,10 +175,8 @@ class UsuarioService
     public function convert($usuarioForm)
     {
         return new Usuario(
-            $usuarioForm['nome'],
             $usuarioForm['login'],
             $usuarioForm['senha'],
-            $usuarioForm['tipo'],
         );
     }
 

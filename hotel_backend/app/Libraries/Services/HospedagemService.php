@@ -45,13 +45,37 @@ class HospedagemService
     public function listarTodos()
     {
         $hospedagensDto = $this->hospedagemRepository->listarTodos();
-        return $this->serializer->serialize($hospedagensDto, $this->format);
+
+        if (!empty($hospedagensDto)) {
+            $response = [
+                'status' => true,
+                'hospedagens' => $hospedagensDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Não existem hospedagens cadastradas.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function listarPorId($id)
     {
         $hospedagemDto = $this->hospedagemRepository->listarPorId($id);
-        return $this->serializer->serialize($hospedagemDto, $this->format);
+
+        if (!empty($hospedagemDto)) {
+            $response = [
+                'status' => true,
+                'hospedagem' => $hospedagemDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Hospedagem não encontrada.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function save(?string $getBody)
@@ -94,39 +118,55 @@ class HospedagemService
     public function update(?string $getBody, $id)
     {
         $request = $this->serializer->decode($getBody, $this->format);
-
         $hospedagem = $this->hospedagemRepository->listarPorId($id);
 
-        $quartoAntigo = $hospedagem->getIdQuarto();
-        $quartoAntigo->setSituacao("Vago");
-        $quartoAntigo = $this->quartoRepository->update($quartoAntigo);
+        if(!empty($hospedagem)){
+            $quarto = $hospedagem->getIdQuarto();
+            $quarto->setSituacao("Vago");
+            $this->quartoRepository->update($quarto);
 
-        $quartoNovo = $this->quartoRepository->listarPorId($request['idQuarto']);
+            $quartoNovo = $this->quartoRepository->listarPorId($request['idQuarto']);
+            $hospedagem->setIdQuarto($quartoNovo);
+            $hospedagem->setDiarias($request['diarias']);
+            $hospedagem->setTotal($this->totalPorHospedagem($quartoNovo->getValor(), $request['diarias']));
+            $hospedagemDto = $this->hospedagemRepository->update($hospedagem);
 
-        $hospedagem->setIdQuarto($quartoNovo);
-        $hospedagem->setDiarias($request['diarias']);
-        $hospedagem->setTotal($this->totalPorHospedagem($quartoNovo->getValor(), $request['diarias']));
-        $hospedagemDto = [
-            'novaHospedagem' => $this->hospedagemRepository->update($hospedagem),
-            'quartoAntigo' => $quartoAntigo
-        ];
+            $response = [
+                'status' => true,
+                'hospedagem' => $hospedagemDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Hospedagem não encontrada.',
+            ];
+        }
 
-        return $this->serializer->serialize($hospedagemDto, $this->format);
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function delete($id)
     {
-        $hospedagem = $this->hospedagemRepository->listarPorId($id);
-        $quarto = $this->quartoRepository->listarPorId($hospedagem->getIdQuarto()->getId());
+        $hospedagemDto = $this->hospedagemRepository->listarPorId($id);
 
-        if (!empty($hospedagem)) {
-            $this->hospedagemRepository->delete($hospedagem);
+        if (!empty($hospedagemDto)) {
+            $quarto = $this->quartoRepository->listarPorId($hospedagemDto->getIdQuarto()->getId());
+            $this->hospedagemRepository->delete($hospedagemDto);
             $quarto->setSituacao("Vago");
             $quartoDto = $this->quartoRepository->update($quarto);
-            return $this->serializer->serialize($quartoDto, $this->format);
+
+            $response = [
+                'status' => true,
+                'hospedagem' => $hospedagemDto,
+                'quartoVago' => $quartoDto,
+            ];
         } else {
-            return $this->serializer->serialize("Hospedagem não encontrada.", $this->format);
+            $response = [
+                'status' => false,
+                'motivo' => 'Hospedagem não encontrada.',
+            ];
         }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     private function totalPorHospedagem($valor, $diarias)

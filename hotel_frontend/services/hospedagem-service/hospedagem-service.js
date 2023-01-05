@@ -1,93 +1,111 @@
 function checkIn() {
-    const checkInForm = {
-        cpf: $("#hospedagem-cadastro-cpf").val(),
-        idQuarto: $("#hospedagem-cadastro-quarto-id").val(),
-        diarias: $("#hospedagem-cadastro-diarias").val(),
+    const hospedagemForm = {
+        cpf: $(".cpf").val(),
+        idQuarto: $(".quarto-id").val(),
+        diarias: $(".diarias").val(),
     }
-
     $.ajax({
         method: "POST",
         url: url + "/hospedagem",
-        data: JSON.stringify(checkInForm),
+        data: JSON.stringify(hospedagemForm),
         success: (response) => {
-
-            if (!response.status) {
-                alert(response.motivo)
-            } else {
+            if (response.status) {
                 hospedagemComponent();
+                closeSidebar()
                 listarHospedagens();
+            } else {
+                alert(response.motivo)
             }
         },
         error: (response) => {
             console.log(response)
+            alert("Erro ao realizar a operação. Tente novamente.")
         }
     })
 }
 
 function listarHospedagens() {
     limparTabela();
+    closeSidebar();
     $.ajax({
         method: "GET",
         url: url + "/hospedagem",
         success: (response) => {
-            response.forEach(hospedagem => {
-                insereDadosNaTabelaHospedagem(hospedagem);
-            })
-        },
-        error: (response) => {
-            console.log(response);
-        }
-    })
-}
-
-function editarHospedagem(idHospedagem) {
-    const editarHospedagemForm = {
-        idQuarto: $("#hospedagem-editar-quarto-id").val(),
-        diarias: $("#hospedagem-editar-diarias").val(),
-    }
-
-    $.ajax({
-        method: "PUT",
-        url: url + "/hospedagem/" + idHospedagem,
-        data: JSON.stringify(editarHospedagemForm),
-        success: (response) => {
-            console.log(response);
-            hospedagemComponent();
-            listarHospedagens();
+            if (response.status) {
+                response.hospedagens.forEach(hospedagem => {
+                    insereDadosNaTabelaHospedagem(hospedagem);
+                    closeSidebar();
+                    ativaBotaoLimpar();
+                })
+            } else {
+                alert(response.motivo)
+            }
         },
         error: (response) => {
             console.log(response)
+            alert("Erro ao realizar a operação. Tente novamente.")
         }
     })
 }
 
-function checkOut(idHospedagem) {
+function editarHospedagem(id) {
+    const hospedagemForm = {
+        idQuarto: $(".quarto-id").val(),
+        diarias: $(".diarias").val(),
+    }
+    $.ajax({
+        method: "PUT",
+        url: url + "/hospedagem/" + id,
+        data: JSON.stringify(hospedagemForm),
+        success: (response) => {
+            if (response.status) {
+                hospedagemComponent();
+                closeSidebar();
+                listarHospedagens();
+            } else {
+                alert(response.motivo);
+            }
+        },
+        error: (response) => {
+            console.log(response)
+            alert("Erro ao realizar a operação. Tente novamente.")
+        }
+    })
+}
 
+function checkOut(id) {
     $.ajax({
         method: "DELETE",
-        url: url + "/hospedagem/" + idHospedagem,
+        url: url + "/hospedagem/" + id,
         success: (response) => {
-            hospedagemComponent();
-            listarHospedagens();
+            if (response.status) {
+                hospedagemComponent();
+                closeSidebar();
+                listarHospedagens();
+                if (!$("#quarto-table-row").hasClass('table-data')) {
+                    desativaBotoes();
+                }
+            } else {
+                alert(response.motivo);
+            }
         },
         error: (response) => {
             console.log(response);
-            console.log('estou caindo aqui');
+            alert("Erro ao realizar a operação. Tente novamente.")
         }
     })
 }
 
-
-function removeLinhaTabelaHospedagem(idHospedagem) {
-    return $("#hospedagem-table-row" + idHospedagem).remove();
+function removeLinhaTabelaHospedagem(id) {
+    $(".hospede-table-row" + id).remove();
 }
 
 function insereDadosNaTabelaHospedagem(hospedagem) {
-    $("#table-body").append(
-        '<tr class="table-data text-dark" id="hospede-table-row' + hospedagem.id + '">\n' +
+    $(".table-body").append(
+        '<tr class="text-dark table-data hospede-table-row' + hospedagem.id + '" id="hospede-table-row">\n' +
         '     <th scope="row">\n' +
-        '         <input class="form-check-input hospedagem-input-radio" type="radio" value="' + hospedagem.id + '">\n' +
-        '         <label class="form-check-label" for="flexRadioDefault1"></label>\n' +
+        '         <input class="form-check-input hospedagem-input-radio" id="hospedagem-input-radio" name="hospedagem-input-radio" type="radio" value="' + hospedagem.id + '" onclick="ativaBotoesEditarExcluir()">\n' +
+        '         <label class="form-check-label" for="hospedagem-input-radio"></label>\n' +
         '     </th>\n' +
         '     <td class="text-center">' + hospedagem.id + '</td>\n' +
         '     <td class="text-center hospedagem-table-data-nome">' + hospedagem.idCliente.nome + '</td>\n' +
@@ -96,4 +114,57 @@ function insereDadosNaTabelaHospedagem(hospedagem) {
         '     <td class="text-center hospedagem-table-data-diarias">' + hospedagem.diarias + '</td>\n' +
         '     <td class="text-center hospedagem-table-data-total">R$ ' + parseFloat(hospedagem.total).toFixed(2).replace("." , ",") + '</td>\n' +
         '</tr>')
+}
+
+function buscaQuartosVagos() {
+    $.ajax({
+        method: "GET",
+        url: url + "/quartos/listar-vagos",
+        success: (response) => {
+            if(response.status){
+                response.quartosVagos.forEach(quarto => {
+                    $(".hospedagem-quarto-id").append('<option class="hospedagem-quarto-option" value="' + quarto.id + '">Quarto ' + quarto.id + '</option>');
+                })
+            } else {
+                alert(response.motivo);
+            }
+        },
+        error: (response) => {
+            console.log(response)
+        }
+    })
+}
+
+function buscaQuartosVagosParaCliente(cpf) {
+    $(".hospedagem-quarto-option").remove();
+
+    let cpfUsuario;
+    typeof cpf === "string" ? cpfUsuario = cpf : cpfUsuario = cpf.value;
+    console.log(cpfUsuario)
+    if (cpfUsuario) {
+        $.ajax({
+            method: "GET",
+            url: url + "/quartos/listar-vagos-para-cliente/" + cpfUsuario,
+            success: (response) => {
+                if (response.status) {
+                    response.quartos.forEach(quarto => {
+                        $(".quarto-id").append('<option class="hospedagem-quarto-option" value="' + quarto.id + '">Quarto ' + quarto.id + '</option>');
+                    })
+                } else {
+                    alert(response.motivo);
+                }
+            },
+            error: (response) => {
+                console.log(response)
+            }
+        })
+    }
+}
+
+function validaCheckinFormFields(){
+    if ($(".cpf").val() && $(".quarto-id").val() && $(".diarias").val()) {
+        $(".botao-enviar").attr("disabled", false);
+    } else {
+        $(".botao-enviar").attr("disabled", true);
+    }
 }

@@ -48,20 +48,57 @@ class ClienteService
 
     public function listarTodos(): string
     {
-        $clientes = $this->clienteRepository->listarTodos();
-        return $this->serializer->serialize($clientes, $this->format);
+        $clientesDto = $this->clienteRepository->listarTodos();
+
+        if(!empty($clientesDto)){
+            $response = [
+                'status' => true,
+                'clientes' => $clientesDto
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Não existem clientes cadastrados.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function listarPorId($id): string
     {
-        $cliente = $this->clienteRepository->listarPorId($id);
-        return $this->serializer->serialize($cliente, $this->format);
+        $clienteDto = $this->clienteRepository->listarPorId($id);
+
+        if (!empty($clienteDto)) {
+            $response = [
+                'status' => true,
+                'cliente' => $clienteDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Cliente não encontrado.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function listarPorCpf($cpf)
     {
-        $cliente = $this->clienteRepository->listarPorCpf($cpf);
-        return $this->serializer->serialize($cliente, $this->format);
+        $clienteDto = $this->clienteRepository->listarPorCpf($cpf);
+
+        if (!empty($clienteDto)) {
+            $response = [
+                'status' => true,
+                'cliente' => $clienteDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Cliente não encontrado.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
+
     }
 
     public function save(?string $getBody): string
@@ -81,43 +118,66 @@ class ClienteService
             $contato,
             $endereco,
         );
-
         $clienteDto = $this->clienteRepository->save($cliente);
-        return $this->serializer->serialize($cliente, $this->format);
+
+        $response = [
+            'status' => true,
+            'cliente' => $clienteDto,
+        ];
+
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function update(?string $getBody, $id): string
     {
         $request = $this->serializer->decode($getBody, $this->format);
-
         $cliente = $this->clienteRepository->listarPorId($id);
 
-        $cliente->setNome($request['nome']);
-        $cliente->setCpf($request['cpf']);
-        $cliente->setNascimento($request['nascimento']);
-        $cliente->setFumante($request['fumante']);
-        $cliente->getIdContato()->setEmail($request['idContato']['email']);
-        $cliente->getIdContato()->setTelefone($request['idContato']['telefone']);
-        $cliente->getIdEndereco()->setCep($request['idEndereco']['cep']);
-        $cliente->getIdEndereco()->setLogradouro($request['idEndereco']['logradouro']);
-        $cliente->getIdEndereco()->setNumero($request['idEndereco']['numero']);
-        $cliente->getIdEndereco()->setBairro($request['idEndereco']['bairro']);
-        $cliente->getIdEndereco()->setLocalidade($request['idEndereco']['localidade']);
-        $cliente->getIdEndereco()->setUf($request['idEndereco']['uf']);
-
-        $clienteDto = $this->clienteRepository->update($cliente, $id);
-        return $this->serializer->serialize($clienteDto, $this->format);
+        if(!empty($cliente)){
+            $cliente->setNome($request['nome']);
+            $cliente->setCpf($request['cpf']);
+            $cliente->setNascimento($request['nascimento']);
+            $cliente->setFumante($request['fumante']);
+            $cliente->getIdContato()->setEmail($request['idContato']['email']);
+            $cliente->getIdContato()->setTelefone($request['idContato']['telefone']);
+            $cliente->getIdEndereco()->setCep($request['idEndereco']['cep']);
+            $cliente->getIdEndereco()->setLogradouro($request['idEndereco']['logradouro']);
+            $cliente->getIdEndereco()->setNumero($request['idEndereco']['numero']);
+            $cliente->getIdEndereco()->setBairro($request['idEndereco']['bairro']);
+            $cliente->getIdEndereco()->setLocalidade($request['idEndereco']['localidade']);
+            $cliente->getIdEndereco()->setUf($request['idEndereco']['uf']);
+            $clienteDto = $this->clienteRepository->update($cliente);
+            $response = [
+                'status' => true,
+                'cliente' => $clienteDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => "Cliente não encontrado.",
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function delete($id){
-        $cliente = $this->clienteRepository->listarPorId($id);
-        if(!empty($cliente)){
-            $this->contatoRepository->delete($cliente->getIdContato());
-            $this->enderecoRepository->delete($cliente->getIdEndereco());
-            return $this->clienteRepository->delete($cliente);
+        $clienteDto = $this->clienteRepository->listarPorId($id);
+
+        if(!empty($clienteDto)){
+            $this->contatoRepository->delete($clienteDto->getIdContato());
+            $this->enderecoRepository->delete($clienteDto->getIdEndereco());
+            $this->clienteRepository->delete($clienteDto);
+            $response = [
+                'status' => true,
+                'cliente' => null,
+            ];
         } else {
-            return false;
+            $response = [
+                'status' => false,
+                'motivo' => "Cliente não encontrado.",
+            ];
         }
+        return $this->serializer->serialize($response, $this->format);
     }
 
 

@@ -20,6 +20,8 @@ class QuartoRepository extends EntityRepository
         return $this->findAll();
     }
 
+
+
     public function listarPorId($id)
     {
         return $this->find($id);

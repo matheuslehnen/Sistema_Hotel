@@ -18,32 +18,32 @@ class HospedagemController extends ResourceController
 
     public function index(): Response
     {
-        $hospedagensDto = $this->hospedagemService->listarTodos();
-        return $this->response->setJSON($hospedagensDto);
+        $response = $this->hospedagemService->listarTodos();
+        return $this->response->setJSON($response);
     }
 
     public function show($id = null)
     {
-        $hospedagemDto = $this->hospedagemService->listarPorId($id);
-        return $this->response->setJSON($hospedagemDto);
+        $response = $this->hospedagemService->listarPorId($id);
+        return $this->response->setJSON($response);
     }
 
     public function create()
     {
-        $hospedagemDto = $this->hospedagemService->save($this->request->getBody());
-        return $this->response->setJSON($hospedagemDto);
+        $response = $this->hospedagemService->save($this->request->getBody());
+        return $this->response->setJSON($response);
     }
 
     public function update($id = null)
     {
-        $hospedagemDto = $this->hospedagemService->update($this->request->getBody(), $id);
-        return $this->response->setJSON($hospedagemDto);
+        $response = $this->hospedagemService->update($this->request->getBody(), $id);
+        return $this->response->setJSON($response);
     }
 
     public function delete($id = null)
     {
-        $hospedagemDto = $this->hospedagemService->delete($id);
-        return $this->response->setJSON($hospedagemDto);
+        $response = $this->hospedagemService->delete($id);
+        return $this->response->setJSON($response);
     }
 
 

@@ -1,38 +1,40 @@
 function hospedagemCheckinTemplate() {
     return '<div class="row d-flex justify-content-center align-items-center p-5 h-100 w-100" id="hospedagem-checkin-component">\n' +
-        '        <div class="col-12 col-md-8 col-lg-6 col-xl-5">\n' +
-        '            <div class="card text-bg-light" style="border-radius: 1rem; ">\n' +
+        '            <div class="card text-bg-light w-50">\n' +
         '                <div class="card-body p-5 text-center">\n' +
         '                    <div>\n' +
-        '                        <h2 class="fw-bold mb-2 text-uppercase">Check in Hospedagem</h2>\n' +
-        '                        <p class="text-dark-50 mb-5">Por favor preencha corretamente as informações!</p>\n' +
-        '                        <form id="hospedagemCheckInForm" method="post">\n' +
+        '                        <h2 class="fw-bold mb-2 text-uppercase">Hospedagem Check in</h2>\n' +
+        '                        <p class="text-dark-50 mb-5">Por favor informe os dados da hospedagem!</p>\n' +
+        '                        <form class="checkInForm" method="post">\n' +
         '                            <div class="form-outline form-white mb-4">\n' +
-        '                                <input type="text" id="hospedagem-cadastro-cpf" placeholder="Cpf do cliente" class="form-control form-control-lg cpf" onblur="buscaQuartosVagosParaCliente(this)"/>\n' +
+        '                                <input type="text"  class="form-control form-control-lg cpf" placeholder="Cpf do cliente" onblur="buscaQuartosVagosParaCliente(this)" onkeyup="validaCheckinFormFields()"/>\n' +
         '                            </div>\n' +
         '                            <div class="row g-3">\n' +
         '                               <div class="form-outline form-white col-md-6">\n' +
-        '                                   <select id="hospedagem-cadastro-quarto-id" class="form-select form-select-lg mb-3 hospedagem-quarto-id" aria-label=".form-select-lg example" >/n' +
-        '                                       <option hidden>Quarto</option>/n' +
+        '                                   <select class="form-select form-select-lg mb-3 quarto-id" onblur="validaCheckinFormFields()">/n' +
+        '                                       <option value="" hidden>Quarto</option>/n' +
         '                                   </select>' +
         '                               </div>\n' +
         '                                <div class="form-outline form-white col-md-6">\n' +
-        '                                    <input type="text" id="hospedagem-cadastro-diarias" placeholder="Diárias" class="form-control form-control-lg"/>\n' +
+        '                                    <input type="text" placeholder="Diárias" class="form-control form-control-lg diarias" onkeyup="validaCheckinFormFields()"/>\n' +
         '                                </div>\n' +
         '                            </div>\n' +
-        '                            <button class="btn btn-outline-primary btn-lg px-5" type="button" onclick="checkIn()">\n' +
+        '                            <button class="btn btn-outline-danger btn-lg px-5" type="button" onclick="hospedagemComponent()">\n' +
+        '                                Voltar\n' +
+        '                            </button>\n' +
+        '                            <button class="btn btn-outline-primary btn-lg px-5 botao-enviar" type="button" onclick="checkIn()" disabled>\n' +
         '                                Enviar\n' +
         '                            </button>\n' +
         '                        </form>\n' +
         '                    </div>\n' +
         '                </div>\n' +
         '            </div>\n' +
-        '        </div>\n' +
         '    </div>'
 }
 
 function hospedagemCheckinComponent() {
     removeTemplateAnterior();
+    closeSidebar();
     $(CONTAINER).append(hospedagemCheckinTemplate());
     // buscaQuartosVagos();
     aplicaMascaraClienteForm();

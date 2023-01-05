@@ -19,31 +19,31 @@ class ClienteController extends ResourceController
 
     public function index(): Response
     {
-        $clientesDto = $this->clienteService->listarTodos();
-        return $this->response->setJSON($clientesDto);
+        $response = $this->clienteService->listarTodos();
+        return $this->response->setJSON($response);
     }
 
     public function show($id = null): Response
     {
-       $clienteDto = $this->clienteService->listarPorId($id);
-       return $this->response->setJSON($clienteDto);
+        $response = $this->clienteService->listarPorId($id);
+       return $this->response->setJSON($response);
     }
 
     public function create(): Response
     {
-       $clienteDto = $this->clienteService->save($this->request->getBody());
-       return $this->response->setJSON($clienteDto);
+        $response = $this->clienteService->save($this->request->getBody());
+       return $this->response->setJSON($response);
     }
 
     public function update($id = null): Response
     {
-        $clienteDto = $this->clienteService->update($this->request->getBody(), $id);
-        return $this->response->setJSON($clienteDto);
+        $response = $this->clienteService->update($this->request->getBody(), $id);
+        return $this->response->setJSON($response);
     }
 
     public function delete($id = null): Response
     {
-        $clienteDto = $this->clienteService->delete($id);
-        return $this->response->setJSON($clienteDto);
+        $response = $this->clienteService->delete($id);
+        return $this->response->setJSON($response);
     }
 }

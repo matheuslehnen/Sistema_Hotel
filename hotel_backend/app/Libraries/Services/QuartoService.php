@@ -42,34 +42,63 @@ class QuartoService
     public function listarTodos(): string
     {
         $quartosDto = $this->quartoRepository->listarTodos();
-        return $this->serializer->serialize($quartosDto, $this->format);
+
+        if (!empty($quartosDto)) {
+            $response = [
+                'status' => true,
+                'quartos' => $quartosDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Não existem quartos cadastrados.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function listarUm($id): string
     {
         $quartoDto = $this->quartoRepository->listarPorId($id);
-        return $this->serializer->serialize($quartoDto, $this->format);
+
+        if (!empty($quartoDto)) {
+            $response = [
+                'status' => true,
+                'quarto' => $quartoDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => 'Quarto não encontrado.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function listarTodosVagos(): string
     {
         $quartosDto = $this->quartoRepository->listarTodosVagos();
-        return $this->serializer->serialize($quartosDto, $this->format);
-    }
-
-    public function listarTodosVagosParaCliente($cpf): string
-    {
-        $cliente = $this->serializer->decode($this->clienteService->listarPorCpf($cpf), $this->format);
-        if(!empty($cliente)){
-            $response =
+        if (!empty($quartosDto)) {
             $response = [
                 'status' => true,
-                'quartos' => $this->quartoRepository->listarTodosVagosParaCliente($cliente['fumante'])
+                'quartosVagos' => $quartosDto,
             ];
         } else {
             $response = [
                 'status' => false,
-                'motivo' => 'Cliente não existente.'
+                'motivo' => 'Não existem quartos vagos no momento.',
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
+    }
+
+    public function listarTodosVagosParaCliente($cpf): string
+    {
+        $response = $this->serializer->decode($this->clienteService->listarPorCpf($cpf), $this->format);
+        if($response['status']){
+            $response = [
+                'status' => true,
+                'quartos' => $this->quartoRepository->listarTodosVagosParaCliente($response['cliente']['fumante'])
             ];
         }
         return $this->serializer->serialize($response, $this->format);
@@ -78,6 +107,7 @@ class QuartoService
     public function save(?string $getBody): string
     {
         $request = $this->serializer->decode($getBody, $this->format);
+
         $quarto = new Quarto(
             $request['localizacao'],
             $request['tipo'],
@@ -86,26 +116,57 @@ class QuartoService
             $request['situacao'],
         );
         $quartoDto = $this->quartoRepository->save($quarto);
-        return $this->serializer->serialize($quartoDto, $this->format);
+        $response = [
+            'status' => true,
+            'quarto' => $quartoDto,
+        ];
+
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function update(?string $getBody, $id): string
     {
         $request = $this->serializer->decode($getBody, $this->format);
         $quarto = $this->quartoRepository->listarPorId($id);
-        $quarto->setLocalizacao($request['localizacao']);
-        $quarto->setTipo($request['tipo']);
-        $quarto->setValor($request['valor']);
-        $quarto->setPermiteFumante($request['permiteFumante']);
-        $quarto->setSituacao($request['situacao']);
-        $quartoDto = $this->quartoRepository->update($quarto);
-        return $this->serializer->serialize($quartoDto, $this->format);
+
+        if(!empty($quarto)){
+            $quarto->setLocalizacao($request['localizacao']);
+            $quarto->setTipo($request['tipo']);
+            $quarto->setValor($request['valor']);
+            $quarto->setPermiteFumante($request['permiteFumante']);
+            $quarto->setSituacao($request['situacao']);
+            $quartoDto = $this->quartoRepository->update($quarto);
+
+            $response = [
+                'status' => true,
+                'quarto' => $quartoDto,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => "Quarto não encontrado.",
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
     public function delete($id = null): string
     {
         $quarto = $this->quartoRepository->listarPorId($id);
-        return $quarto != null && $this->quartoRepository->delete($quarto);
+
+        if(!empty($quarto)){
+            $this->quartoRepository->delete($quarto);
+            $response = [
+                'status' => true,
+                'quarto' => null,
+            ];
+        } else {
+            $response = [
+                'status' => false,
+                'motivo' => "Quarto não encontrado.",
+            ];
+        }
+        return $this->serializer->serialize($response, $this->format);
     }
 
 

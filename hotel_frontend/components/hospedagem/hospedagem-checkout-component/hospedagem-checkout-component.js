@@ -51,6 +51,7 @@ function hospedagemCheckoutComponent(){
     }
     if(checkOutData.idHospedagem){
         removeTemplateAnterior();
+        closeSidebar();
         $(CONTAINER).append(hospedagemCheckoutTemplate(checkOutData));
         $("#hospedagem-checkout-nome").val(checkOutData.nome);
         $("#hospedagem-checkout-cpf").val(checkOutData.cpf);
